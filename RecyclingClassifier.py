@@ -6,9 +6,17 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.applications import MobileNetV2
 from tensorflow.keras.layers import Dense, GlobalAveragePooling2D
 from tensorflow.keras.models import Model
+import os  # Import the os module
+
+# Get the current working directory
+current_dir = os.getcwd()
+
+# Define the path to the 'materials' folder
+materials_dir = os.path.join(current_dir, "materials")
+
 
 # Define the dataset path
-dataset_path = "/Users/alphadiallo/Desktop/DSProjects/Mecro/RecycleClassifier/recycle_classifier/materials"
+# dataset_path = "/Users/alphadiallo/Desktop/DSProjects/Mecro/RecycleClassifier/recycle_classifier/materials"
 
 # Define image dimensions
 img_height, img_width = 224, 224
@@ -28,7 +36,7 @@ train_datagen = ImageDataGenerator(
 
 # Load and preprocess the dataset
 train_generator = train_datagen.flow_from_directory(
-    dataset_path,
+    materials_dir,  # Use the 'materials' folder path
     target_size=(img_height, img_width),
     batch_size=batch_size,
     class_mode="categorical",
@@ -36,7 +44,7 @@ train_generator = train_datagen.flow_from_directory(
 )
 
 validation_generator = train_datagen.flow_from_directory(
-    dataset_path,
+    materials_dir,  # Use the 'materials' folder path
     target_size=(img_height, img_width),
     batch_size=batch_size,
     class_mode="categorical",
