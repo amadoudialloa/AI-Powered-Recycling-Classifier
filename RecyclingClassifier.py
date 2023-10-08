@@ -64,7 +64,7 @@ model = Model(inputs=base_model.input, outputs=predictions)
 # Compile the model
 model.compile(optimizer="adam", loss="categorical_crossentropy", metrics=["accuracy"])
 
-
+"""
 # Train the model using all available data
 model.fit(
     train_generator,
@@ -73,7 +73,7 @@ model.fit(
     steps_per_epoch=None,
     validation_steps=None,
 )
- 
+ """
 # Save the trained model
 model.save("waste_classifier_model_with_augmentation.h5")
 
