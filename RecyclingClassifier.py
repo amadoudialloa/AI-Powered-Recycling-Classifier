@@ -4,48 +4,26 @@ from PIL import Image
 import tensorflow as tf
 import numpy as np
 import os
-import sys
 
-# Check if running locally based on a command-line argument
-running_locally = "--local" in sys.argv
+# Set the working directory to the root of your repository
+root_dir = os.path.dirname(os.path.abspath(__file__))
+os.chdir(root_dir)
 
 # Function to load the pre-trained model
-# Function to load the pre-trained model
+@st.cache(allow_output_mutation=True)
 def load_model():
-    model_path = "waste_classifier_model_with_augmentation.h5"
+    # Specify the absolute path to the model file
+    model_path = os.path.join(root_dir, "waste_classifier_model_with_augmentation.h5")
     try:
         loaded_model = tf.keras.models.load_model(model_path)
         return loaded_model
     except Exception as e:
-        st.error(f"Error loading the model: {e}")
-        return None  # Return None if there is an error
+        return str(e)
 
-# Function to preprocess and classify the uploaded image
-def classify_waste(image):
-    try:
-        # Load the model
-        model = load_model()
+# Load the model
+model = load_model()
 
-        if model is not None:
-            # Preprocess the image
-            image = image.resize((224, 224))  # Resize to match the model's input size
-            image_array = np.array(image) / 255.0  # Normalize pixel values
-
-            # Make predictions using the model
-            class_names = ["can", "glass", "plastic"]
-            prediction = model.predict(np.expand_dims(image_array, axis=0))
-
-            # Get predicted class and confidence score
-            predicted_class = class_names[np.argmax(prediction)]
-            confidence_score = np.max(prediction)
-
-            return predicted_class, confidence_score
-
-    except Exception as e:
-        st.error(f"Error classifying the image: {e}")
-
-    return "Unknown", 0.0  # Return "Unknown" and confidence score 0.0 in case of an error
-
+# ... (Rest of your Streamlit app code, including UI and classification logic)
 
 # Streamlit app
 st.title("Waste Classification App")
