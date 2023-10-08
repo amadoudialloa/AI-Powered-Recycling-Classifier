@@ -19,20 +19,31 @@ def load_model():
     except Exception as e:
         return str(e)
 
-# Define the classify_waste function for image classification
 def classify_waste(image):
-    # Preprocess the image and perform classification here
-    # Replace this with your actual image classification logic
-    class_names = ["can", "glass", "plastic"]
-    # Replace with your actual image preprocessing and prediction code
-    # Example placeholder code:
-    image_array = np.array(image)
-    image_array = image_array / 255.0  # Normalize pixel values (replace with actual preprocessing)
-    prediction = model.predict(np.expand_dims(image_array, axis=0))  # Use the loaded model
-    predicted_class = class_names[np.argmax(prediction)]
-    confidence_score = np.max(prediction)
+    try:
+        # Preprocess the image and perform classification here
+        # Replace this with your actual image classification logic
+        class_names = ["can", "glass", "plastic"]
+        
+        # Resize the image and normalize pixel values
+        image = image.resize((224, 224))
+        image_array = np.array(image) / 255.0  # Normalize pixel values
 
-    return predicted_class, confidence_score
+        # Ensure the input shape matches the model's input shape
+        expected_shape = model.input_shape[1:3]
+        if image_array.shape[:2] != expected_shape:
+            raise ValueError(f"Expected image shape {expected_shape}, but got {image_array.shape[:2]}")
+
+        # Make predictions using the loaded model
+        prediction = model.predict(np.expand_dims(image_array, axis=0))
+
+        predicted_class = class_names[np.argmax(prediction)]
+        confidence_score = np.max(prediction)
+
+        return predicted_class, confidence_score
+    except Exception as e:
+        return str(e), 0.0  # Return an error message and confidence score 0.0 in case of an error
+
 
 # Load the model
 if running_locally:
