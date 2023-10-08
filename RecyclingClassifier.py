@@ -12,7 +12,12 @@ running_locally = "--local" in sys.argv
 # Function to load the pre-trained model
 @st.cache(allow_output_mutation=True)
 def load_model():
-    return tf.keras.models.load_model("waste_classifier_model_with_augmentation.h5")
+    model_path = "waste_classifier_model_with_augmentation.h5"
+    try:
+        loaded_model = tf.keras.models.load_model(model_path)
+        return loaded_model
+    except Exception as e:
+        return str(e)
 
 # Load the model
 if running_locally:
