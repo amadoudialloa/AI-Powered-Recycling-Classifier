@@ -12,7 +12,7 @@ os.chdir(root_dir)
 # Function to load the pre-trained model
 @st.cache(allow_output_mutation=True)
 def load_model():
-    # Specify the absolute path to the model file
+    # Specify the relative path to the model file (assuming it's in the same directory)
     model_path = "waste_classifier_model_with_augmentation.h5"
     try:
         loaded_model = tf.keras.models.load_model(model_path)
