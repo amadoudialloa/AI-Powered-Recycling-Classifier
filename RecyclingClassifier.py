@@ -4,9 +4,10 @@ from PIL import Image
 import tensorflow as tf
 import numpy as np
 import os
+import sys  # Import the sys module
 
-# Check if running locally
-running_locally = st._is_running_with_streamlit
+# Check if running locally based on a command-line argument
+running_locally = "--local" in sys.argv
 
 # Function to load the pre-trained model
 @st.cache(allow_output_mutation=True)
@@ -19,6 +20,7 @@ if running_locally:
     model = load_model()  # Load the trained model if running locally
 else:
     model = load_model()  # Load the trained model during deployment
+
 
 # ... (Rest of your Streamlit app code, including UI and classification logic)
 
