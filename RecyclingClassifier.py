@@ -18,33 +18,20 @@ def load_model():
         loaded_model = tf.keras.models.load_model(model_path)
         return loaded_model
     except Exception as e:
-        st.error(f"Error loading the model: {e}")
-        return None  # Return None if the model couldn't be loaded
+        st.error(f"Error loading the model: {str(e)}")
+        return None  # Return None in case of an error
 
 # Load the model
 model = load_model()
 
 def classify_waste(image):
     if model is None:
-        return "Unknown", 0.0  # Handle the case where the model couldn't be loaded
-    
-    # Preprocess the image and perform classification here
-    img_height, img_width = 224, 224
-    
-    # Preprocess the image (resize and normalize pixel values)
-    image = image.resize((img_height, img_width))
-    image_array = np.array(image) / 255.0  # Normalize pixel values
+        return "Unknown", 0.0  # Return default values in case of an error
 
-    # Use the loaded model for predictions
-    # Note: We don't need to load the model here since it's already loaded at the beginning
-    class_names = ["can", "glass", "plastic"]
-    prediction = model.predict(np.expand_dims(image_array, axis=0))
-    predicted_class = class_names[np.argmax(prediction)]
-    confidence_score = np.max(prediction)
-
-    return predicted_class, confidence_score
+    # Rest of your classification logic here...
 
 # ... (Rest of your Streamlit app code, including UI and classification logic)
+
 
 # Streamlit app
 st.title("Waste Classification App")
