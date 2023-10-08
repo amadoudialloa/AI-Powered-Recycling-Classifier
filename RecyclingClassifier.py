@@ -17,7 +17,8 @@ def load_model():
         loaded_model = tf.keras.models.load_model(model_path)
         return loaded_model
     except Exception as e:
-        return str(e)
+        st.error(f"Error loading the model: {e}")
+        return None  # Return None if there is an error
 
 # Function to preprocess and classify the uploaded image
 def classify_waste(image):
@@ -25,22 +26,26 @@ def classify_waste(image):
         # Load the model
         model = load_model()
 
-        # Preprocess the image
-        image = image.resize((224, 224))  # Resize to match the model's input size
-        image_array = np.array(image) / 255.0  # Normalize pixel values
+        if model is not None:
+            # Preprocess the image
+            image = image.resize((224, 224))  # Resize to match the model's input size
+            image_array = np.array(image) / 255.0  # Normalize pixel values
 
-        # Make predictions using the model
-        class_names = ["can", "glass", "plastic"]
-        prediction = model.predict(np.expand_dims(image_array, axis=0))
+            # Make predictions using the model
+            class_names = ["can", "glass", "plastic"]
+            prediction = model.predict(np.expand_dims(image_array, axis=0))
 
-        # Get predicted class and confidence score
-        predicted_class = class_names[np.argmax(prediction)]
-        confidence_score = np.max(prediction)
+            # Get predicted class and confidence score
+            predicted_class = class_names[np.argmax(prediction)]
+            confidence_score = np.max(prediction)
 
-        return predicted_class, confidence_score
+            return predicted_class, confidence_score
 
     except Exception as e:
-        return str(e), 0.0  # Return an error message and confidence score 0.0 in case of an error
+        st.error(f"Error classifying the image: {e}")
+
+    return "Unknown", 0.0  # Return "Unknown" and confidence score 0.0 in case of an error
+
 
 # Streamlit app
 st.title("Waste Classification App")
