@@ -13,7 +13,7 @@ os.chdir(root_dir)
 @st.cache(allow_output_mutation=True)
 def load_model():
     # Specify the absolute path to the model file
-    model_path = os.path.join(root_dir, "waste_classifier_model_with_augmentation.h5")
+    model_path = "waste_classifier_model_with_augmentation.h5"
     try:
         loaded_model = tf.keras.models.load_model(model_path)
         return loaded_model
