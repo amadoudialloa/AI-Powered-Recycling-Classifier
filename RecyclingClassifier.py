@@ -10,7 +10,7 @@ import sys
 running_locally = "--local" in sys.argv
 
 # Function to load the pre-trained model
-@st.cache(allow_output_mutation=True)
+# Function to load the pre-trained model
 def load_model():
     model_path = "waste_classifier_model_with_augmentation.h5"
     try:
