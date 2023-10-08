@@ -4,6 +4,8 @@ from PIL import Image
 import tensorflow as tf
 import numpy as np
 import os
+from train_model import train_and_save_model
+
 
 # Set the working directory to the root of your repository
 root_dir = os.path.dirname(os.path.abspath(__file__))
