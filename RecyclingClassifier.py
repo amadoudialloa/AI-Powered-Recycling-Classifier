@@ -19,20 +19,27 @@ def load_model():
     except Exception as e:
         return str(e)
 
+# Define the classify_waste function for image classification
+def classify_waste(image):
+    # Preprocess the image and perform classification here
+    # Replace this with your actual image classification logic
+    class_names = ["can", "glass", "plastic"]
+    # Replace with your actual image preprocessing and prediction code
+    # Example placeholder code:
+    image_array = np.array(image)
+    image_array = image_array / 255.0  # Normalize pixel values (replace with actual preprocessing)
+    prediction = model.predict(np.expand_dims(image_array, axis=0))  # Use the loaded model
+    predicted_class = class_names[np.argmax(prediction)]
+    confidence_score = np.max(prediction)
+
+    return predicted_class, confidence_score
+
 # Load the model
 if running_locally:
     os.system("python train_model.py")  # Run the training script if running locally
     model = load_model()  # Load the trained model if running locally
 else:
     model = load_model()  # Load the trained model during deployment
-
-
-# ... (Rest of your Streamlit app code, including UI and classification logic)
-
-
-# Define dataset path (the same as in train_model.py)
-dataset_path = "/Users/alphadiallo/Desktop/DSProjects/Mecro/RecycleClassifier/recycle_classifier/materials"
-img_height, img_width = 224, 224
 
 # ... (Rest of your Streamlit app code, including UI and classification logic)
 # Streamlit app
