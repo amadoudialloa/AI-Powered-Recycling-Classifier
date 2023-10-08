@@ -1,99 +1,30 @@
+# Import necessary libraries
 import streamlit as st
 from PIL import Image
 import tensorflow as tf
 import numpy as np
-from tensorflow.keras.preprocessing.image import ImageDataGenerator
-from tensorflow.keras.applications import MobileNetV2
-from tensorflow.keras.layers import Dense, GlobalAveragePooling2D
-from tensorflow.keras.models import Model
-import os  # Import the os module
+import os
 
-# Get the current working directory
-current_dir = os.getcwd()
+# Check if running locally
+running_locally = st._is_running_with_streamlit
 
-# Define the path to the 'materials' folder
-materials_dir = os.path.join(current_dir, "materials")
+# If running locally, train the model
+if running_locally:
+    os.system("python train_model.py")  # Run the training script
 
+# Function to load the pre-trained model
+@st.cache(allow_output_mutation=True)
+def load_model():
+    return tf.keras.models.load_model("waste_classifier_model_with_augmentation.h5")
 
-# Define the dataset path
-# dataset_path = "/Users/alphadiallo/Desktop/DSProjects/Mecro/RecycleClassifier/recycle_classifier/materials"
+# Load the model
+model = load_model()
 
-# Define image dimensions
+# Define dataset path (the same as in train_model.py)
+dataset_path = "/Users/alphadiallo/Desktop/DSProjects/Mecro/RecycleClassifier/recycle_classifier/materials"
 img_height, img_width = 224, 224
-batch_size = 20
 
-# Create an ImageDataGenerator with data augmentation
-train_datagen = ImageDataGenerator(
-    rescale=1.0 / 255.0,  # Normalize pixel values
-    rotation_range=20,  # Randomly rotate images by up to 20 degrees
-    width_shift_range=0.2,  # Randomly shift image width by up to 20%
-    height_shift_range=0.2,  # Randomly shift image height by up to 20%
-    shear_range=0.2,  # Shear transformations
-    zoom_range=0.2,  # Randomly zoom in by up to 20%
-    horizontal_flip=True,  # Randomly flip images horizontally
-    validation_split=0.2,  # Split data into training and validation
-)
-
-# Load and preprocess the dataset
-train_generator = train_datagen.flow_from_directory(
-    materials_dir,  # Use the 'materials' folder path
-    target_size=(img_height, img_width),
-    batch_size=batch_size,
-    class_mode="categorical",
-    subset="training",  # Training split
-)
-
-validation_generator = train_datagen.flow_from_directory(
-    materials_dir,  # Use the 'materials' folder path
-    target_size=(img_height, img_width),
-    batch_size=batch_size,
-    class_mode="categorical",
-    subset="validation",  # Validation split
-)
-
-# Create a base model (MobileNetV2) and add custom classification layers
-base_model = MobileNetV2(weights="imagenet", include_top=False)
-x = base_model.output
-x = GlobalAveragePooling2D()(x)
-x = Dense(1024, activation="relu")(x)
-predictions = Dense(3, activation="softmax")(x)
-
-# Create the final model
-model = Model(inputs=base_model.input, outputs=predictions)
-
-# Compile the model
-model.compile(optimizer="adam", loss="categorical_crossentropy", metrics=["accuracy"])
-
-"""
-# Train the model using all available data
-model.fit(
-    train_generator,
-    epochs=10,  # Adjust as needed
-    validation_data=validation_generator,
-    steps_per_epoch=None,
-    validation_steps=None,
-)
- """
-# Save the trained model
-model.save("waste_classifier_model_with_augmentation.h5")
-
-# Function to preprocess and classify the uploaded image
-def classify_waste(image):
-    # Load the trained model
-    model = tf.keras.models.load_model("waste_classifier_model_with_augmentation.h5")
-
-    # Preprocess the image (resize and normalize pixel values)
-    image = image.resize((img_height, img_width))
-    image = np.array(image) / 255.0  # Normalize pixel values
-
-    # Make predictions using the model
-    class_names = ["can", "glass", "plastic"]
-    prediction = model.predict(np.expand_dims(image, axis=0))
-    predicted_class = class_names[np.argmax(prediction)]
-    confidence_score = np.max(prediction)
-
-    return predicted_class, confidence_score
-
+# ... (Rest of your Streamlit app code, including UI and classification logic)
 # Streamlit app
 st.title("Waste Classification App")
 st.write("""AI-Powered Recycling Classifier
@@ -151,3 +82,4 @@ if uploaded_image is not None:
     # Display the prediction and confidence score
     st.write(f"Prediction: {predicted_class}")
     st.write(f"Confidence Score: {confidence_score:.2f}")
+
