@@ -128,7 +128,7 @@ Environmental Impact
 
 Sustainable Living """)
 
-st.write("Upload an image of waste, and we will classify it.")
+st.write("Upload an image of waste, and I will classify it.")
 
 # File upload widget
 uploaded_image = st.file_uploader("Choose an image...", type=["jpg", "png", "jpeg"])
