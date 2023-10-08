@@ -18,12 +18,16 @@ def load_model():
         loaded_model = tf.keras.models.load_model(model_path)
         return loaded_model
     except Exception as e:
-        return str(e)
+        st.error(f"Error loading the model: {e}")
+        return None  # Return None if the model couldn't be loaded
 
 # Load the model
 model = load_model()
 
 def classify_waste(image):
+    if model is None:
+        return "Unknown", 0.0  # Handle the case where the model couldn't be loaded
+    
     # Preprocess the image and perform classification here
     img_height, img_width = 224, 224
     
@@ -32,9 +36,7 @@ def classify_waste(image):
     image_array = np.array(image) / 255.0  # Normalize pixel values
 
     # Use the loaded model for predictions
-    model = load_model()  # Load the model
-
-    # Make predictions using the model
+    # Note: We don't need to load the model here since it's already loaded at the beginning
     class_names = ["can", "glass", "plastic"]
     prediction = model.predict(np.expand_dims(image_array, axis=0))
     predicted_class = class_names[np.argmax(prediction)]
@@ -101,4 +103,5 @@ if uploaded_image is not None:
     # Display the prediction and confidence score
     st.write(f"Prediction: {predicted_class}")
     st.write(f"Confidence Score: {confidence_score:.2f}")
+
 
