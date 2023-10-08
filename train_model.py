@@ -10,7 +10,7 @@ from tensorflow.keras.models import Model
 # Define dataset path, image dimensions, batch size, etc.
 dataset_path = "/Users/alphadiallo/Desktop/DSProjects/Mecro/RecycleClassifier/recycle_classifier/materials"
 img_height, img_width = 224, 224
-batch_size = 40
+batch_size = 20
 
 # Create an ImageDataGenerator with data augmentation
 train_datagen = ImageDataGenerator(
@@ -57,7 +57,7 @@ model.compile(optimizer="adam", loss="categorical_crossentropy", metrics=["accur
 # Train the model
 model.fit(
     train_generator,
-    epochs=30,
+    epochs=10,  # Adjust as needed
     validation_data=validation_generator,
     steps_per_epoch=None,
     validation_steps=None,
@@ -65,3 +65,4 @@ model.fit(
 
 # Save the trained model
 model.save("waste_classifier_model_with_augmentation.h5")
+
