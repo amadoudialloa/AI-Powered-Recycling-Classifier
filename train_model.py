@@ -1,14 +1,16 @@
-# train_model.py
-
 # Import necessary libraries
 import tensorflow as tf
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.applications import MobileNetV2
 from tensorflow.keras.layers import Dense, GlobalAveragePooling2D
 from tensorflow.keras.models import Model
+import os
 
-# Define dataset path, image dimensions, batch size, etc.
-dataset_path = "/Users/alphadiallo/Desktop/DSProjects/Mecro/RecycleClassifier/recycle_classifier/materials"
+# Get the current directory of the script
+current_dir = os.path.dirname(os.path.abspath(__file__))
+
+# Define dataset path, image dimensions, batch size, etc. (use a relative path)
+dataset_path = os.path.join(current_dir, "materials")
 img_height, img_width = 224, 224
 batch_size = 20
 
@@ -65,4 +67,5 @@ model.fit(
 
 # Save the trained model
 model.save("waste_classifier_model_with_augmentation.h5")
+
 
