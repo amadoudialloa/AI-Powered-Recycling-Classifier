@@ -34,7 +34,6 @@ model = load_model()
 
 # Rest of your Streamlit app code...
 
-
 def classify_waste(image):
     if model is None:
         return "Unknown", 0.0  # Return default values in case of an error
@@ -53,8 +52,6 @@ def classify_waste(image):
     confidence_score = np.max(prediction)
 
     return predicted_class, confidence_score
-
-
 
 # Streamlit app
 st.title("Waste Classification App")
@@ -113,5 +110,6 @@ if uploaded_image is not None:
     # Display the prediction and confidence score
     st.write(f"Prediction: {predicted_class}")
     st.write(f"Confidence Score: {confidence_score:.2f}")
+
 
 
