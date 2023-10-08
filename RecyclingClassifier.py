@@ -90,7 +90,7 @@ def classify_waste(image):
 st.title("Waste Classification App")
 st.write("""AI-Powered Recycling Classifier
 
-Developed by: [Your Name]
+Developed by: Alpha Diallo
 
 Summary:
 
