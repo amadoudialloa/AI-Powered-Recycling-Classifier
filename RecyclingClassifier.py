@@ -8,17 +8,20 @@ import os
 # Check if running locally
 running_locally = st._is_running_with_streamlit
 
-# If running locally, train the model
-if running_locally:
-    os.system("python train_model.py")  # Run the training script
-
 # Function to load the pre-trained model
 @st.cache(allow_output_mutation=True)
 def load_model():
     return tf.keras.models.load_model("waste_classifier_model_with_augmentation.h5")
 
 # Load the model
-model = load_model()
+if running_locally:
+    os.system("python train_model.py")  # Run the training script if running locally
+    model = load_model()  # Load the trained model if running locally
+else:
+    model = load_model()  # Load the trained model during deployment
+
+# ... (Rest of your Streamlit app code, including UI and classification logic)
+
 
 # Define dataset path (the same as in train_model.py)
 dataset_path = "/Users/alphadiallo/Desktop/DSProjects/Mecro/RecycleClassifier/recycle_classifier/materials"
