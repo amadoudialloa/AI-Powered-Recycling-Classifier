@@ -12,17 +12,28 @@ os.chdir(root_dir)
 # Function to load the pre-trained model
 @st.cache(allow_output_mutation=True)
 def load_model():
-    # Specify the relative path to the model file (assuming it's in the same directory)
-    model_path = "./waste_classifier_model_with_augmentation.h5"
+    # Specify the absolute path to the model file
+    model_path = os.path.join(root_dir, "waste_classifier_model_with_augmentation.h5")
     try:
         loaded_model = tf.keras.models.load_model(model_path)
         return loaded_model
     except Exception as e:
         st.error(f"Error loading the model: {str(e)}")
-        return None  # Return None in case of an error
+        return None
+
+# Check if the model file exists, if not, train the model
+if not os.path.isfile(os.path.join(root_dir, "waste_classifier_model_with_augmentation.h5")):
+    # Import the training code from train_model.py
+    import train_model
+    
+    # Train the model
+    train_model.train_and_save_model(root_dir)
 
 # Load the model
 model = load_model()
+
+# Rest of your Streamlit app code...
+
 
 def classify_waste(image):
     if model is None:
