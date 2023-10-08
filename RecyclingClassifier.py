@@ -23,6 +23,25 @@ def load_model():
 # Load the model
 model = load_model()
 
+def classify_waste(image):
+    # Preprocess the image and perform classification here
+    img_height, img_width = 224, 224
+    
+    # Preprocess the image (resize and normalize pixel values)
+    image = image.resize((img_height, img_width))
+    image_array = np.array(image) / 255.0  # Normalize pixel values
+
+    # Use the loaded model for predictions
+    model = load_model()  # Load the model
+
+    # Make predictions using the model
+    class_names = ["can", "glass", "plastic"]
+    prediction = model.predict(np.expand_dims(image_array, axis=0))
+    predicted_class = class_names[np.argmax(prediction)]
+    confidence_score = np.max(prediction)
+
+    return predicted_class, confidence_score
+
 # ... (Rest of your Streamlit app code, including UI and classification logic)
 
 # Streamlit app
