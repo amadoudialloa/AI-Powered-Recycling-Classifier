@@ -1,11 +1,10 @@
-# Import necessary libraries
+# RecyclingClassifier.py
+
 import streamlit as st
 from PIL import Image
 import tensorflow as tf
 import numpy as np
 import os
-from train_model import train_and_save_model
-
 
 # Set the working directory to the root of your repository
 root_dir = os.path.dirname(os.path.abspath(__file__))
@@ -112,6 +111,3 @@ if uploaded_image is not None:
     # Display the prediction and confidence score
     st.write(f"Prediction: {predicted_class}")
     st.write(f"Confidence Score: {confidence_score:.2f}")
-
-
-
