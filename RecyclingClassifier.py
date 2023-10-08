@@ -4,7 +4,7 @@ from PIL import Image
 import tensorflow as tf
 import numpy as np
 import os
-import sys  # Import the sys module
+import sys
 
 # Check if running locally based on a command-line argument
 running_locally = "--local" in sys.argv
@@ -19,40 +19,29 @@ def load_model():
     except Exception as e:
         return str(e)
 
+# Function to preprocess and classify the uploaded image
 def classify_waste(image):
     try:
-        # Preprocess the image and perform classification here
-        # Replace this with your actual image classification logic
-        class_names = ["can", "glass", "plastic"]
-        
-        # Resize the image and normalize pixel values
-        image = image.resize((224, 224))
+        # Load the model
+        model = load_model()
+
+        # Preprocess the image
+        image = image.resize((224, 224))  # Resize to match the model's input size
         image_array = np.array(image) / 255.0  # Normalize pixel values
 
-        # Ensure the input shape matches the model's input shape
-        expected_shape = model.input_shape[1:3]
-        if image_array.shape[:2] != expected_shape:
-            raise ValueError(f"Expected image shape {expected_shape}, but got {image_array.shape[:2]}")
-
-        # Make predictions using the loaded model
+        # Make predictions using the model
+        class_names = ["can", "glass", "plastic"]
         prediction = model.predict(np.expand_dims(image_array, axis=0))
 
+        # Get predicted class and confidence score
         predicted_class = class_names[np.argmax(prediction)]
         confidence_score = np.max(prediction)
 
         return predicted_class, confidence_score
+
     except Exception as e:
         return str(e), 0.0  # Return an error message and confidence score 0.0 in case of an error
 
-
-# Load the model
-if running_locally:
-    os.system("python train_model.py")  # Run the training script if running locally
-    model = load_model()  # Load the trained model if running locally
-else:
-    model = load_model()  # Load the trained model during deployment
-
-# ... (Rest of your Streamlit app code, including UI and classification logic)
 # Streamlit app
 st.title("Waste Classification App")
 st.write("""AI-Powered Recycling Classifier
