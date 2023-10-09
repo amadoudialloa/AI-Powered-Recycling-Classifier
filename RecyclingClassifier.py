@@ -60,7 +60,7 @@ def classify_waste(image):
         validation_data=validation_generator,
         steps_per_epoch=None,
         validation_steps=None,
-    )
+)
 
     # Save the trained model
     model.save(os.path.join(root_dir, "waste_classifier_model_with_augmentation.h5"))
