@@ -28,7 +28,8 @@ if not os.path.isfile(os.path.join(root_dir, "waste_classifier_model_with_augmen
     import train_model
     
     # Train the model
-    train_model.train_model(root_dir)
+  train_model.train_and_save_model(root_dir)
+
 
 # Load the model
 model = load_model()
