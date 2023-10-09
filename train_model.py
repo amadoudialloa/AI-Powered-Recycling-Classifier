@@ -44,7 +44,7 @@ validation_generator = train_datagen.flow_from_directory(
 )
 
 # Create a base model (MobileNetV2) and add custom classification layers
-base_model = MobileNetV2(weights="imagenet", include_top=False)
+base_model = MobileNetV2(weights="imagenet", include_top=False, input_shape=(img_height, img_width, 3))
 x = base_model.output
 x = GlobalAveragePooling2D()(x)
 x = Dense(1024, activation="relu")(x)
