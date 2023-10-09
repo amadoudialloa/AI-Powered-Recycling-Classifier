@@ -28,8 +28,7 @@ if not os.path.isfile(os.path.join(root_dir, "waste_classifier_model_with_augmen
     import train_model
     
     # Train the model
-  train_model.train_and_save_model(root_dir)
-
+    train_model.train_and_save_model(root_dir)
 
 # Load the model
 model = load_model()
@@ -54,21 +53,6 @@ def classify_waste(image):
     confidence_score = np.max(prediction)
 
     return predicted_class, confidence_score
-
-    # Train the model
-    model.fit(
-        train_generator,
-        epochs=10,  # Adjust as needed
-        validation_data=validation_generator,
-        steps_per_epoch=None,
-        validation_steps=None,
-    )
-
-    # Save the trained model
-    model.save(os.path.join(root_dir, "waste_classifier_model_with_augmentation.h5"))
-
-# Load the model
-model = load_model()
 
 # Streamlit app
 st.title("Waste Classification App")
