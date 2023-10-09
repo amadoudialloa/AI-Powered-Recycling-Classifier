@@ -54,7 +54,7 @@ def classify_waste(image):
 
     return predicted_class, confidence_score
 
- model.fit(
+model.fit(
         train_generator,
         epochs=10,  # Adjust as needed
         validation_data=validation_generator,
